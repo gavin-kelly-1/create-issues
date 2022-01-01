@@ -30,7 +30,7 @@ export async function loopIssues (tools: Toolkit) {
     const issues = parsed.issues
     const milestones=parsed.milestones
 
-    const milestone2i= {}
+    const milestone2i: {[index: string]:any} = {}
     for (const j of milestones) {
           const i = await tools.github.issues.createMilestone({
               ...tools.context.repo,
@@ -41,7 +41,7 @@ export async function loopIssues (tools: Toolkit) {
     }
 
     let ind=1
-    const issue2i = {}
+    const issue2i: {[index: string]:any} = {}
     for (const j of issues) {
 	issue2i[j.title.toString()] = ind
 	ind += 1
@@ -85,7 +85,7 @@ export async function createAnIssue (tools: Toolkit, attributes) {
     date: Date.now()
   }
 
-    const body = issueObj.body
+    const body = attributes.body
     delete attributes['body']
     
   const templated = {
