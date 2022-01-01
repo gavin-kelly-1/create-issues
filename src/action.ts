@@ -21,7 +21,7 @@ function logError(tools: Toolkit, template: string, action: 'creating' | 'updati
 }
 
 export async function loopIssues (tools: Toolkit) {
-    const file = tools.intputs.json
+    const file = tools.inputs.json
     if (!file) {
       tools.exit.failure(`No json file of issues provided`)
     }
