@@ -60,7 +60,7 @@ export async function loopIssues (tools: Toolkit) {
     }
 }
 
-export async function createAnIssue (tools: Toolkit, attributes) {
+export async function createAnIssue (tools: Toolkit, attributes: any) {
   const assignees = tools.inputs.assignees
   const searchExistingType = tools.inputs.search_existing || 'open'
 
