@@ -24,6 +24,9 @@ inputs:
     description: Existing types of issues to search for (comma-separated)
     required: false
     default: open
+  json:
+    descrption: path to json file containing issues and milestones
+    required: true
 outputs:
   number:
     description: Number of the issue that was created
