@@ -90,7 +90,7 @@ export async function createAnIssue (tools: Toolkit, attributes: any) {
     title: env.renderString(attributes.title, templateVariables)
   }
   tools.log.debug('Templates compiled', templated)
-    if (attributes.dapi.length!=0) {
+    if (attributes.depi.length!=0) {
 	templated.body = "Blocked by " + attributes.dapi.join(", ") + "\n\n" + templated.body
     }
     
