@@ -37,24 +37,24 @@ export async function loopIssues (tools: Toolkit) {
 	      title: j.title,
               description: j.description
           })
-	milestone2i[j.title] = i
+	milestone2i[j.title.toString()] = i
     }
 
     let ind=1
     const issue2i = {}
     for (const j of issues) {
-	issue2i[j.title] = ind
+	issue2i[j.title.toString()] = ind
 	ind += 1
     }
     for (const j of issues) {
 	j.depi = []
 	if (j.hasOwnProperty("deps")) {
 	    for (const d of j.deps) {
-		j.depi.push(issue2i[d])
+		j.depi.push(issue2i[d].toString())
 	    }
 	}
 	if (j.hasOwnProperty("milestone")) {
-	    j.milestone=milestone2i[d]
+	    j.milestone=milestone2i[d.toString()]
 	}
 	createAnIssue(tools, j)
     }
