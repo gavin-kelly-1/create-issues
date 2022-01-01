@@ -84,9 +84,6 @@ export async function createAnIssue (tools: Toolkit, attributes: any) {
     env: process.env,
     date: Date.now()
   }
-
-    const body = attributes.body
-    delete attributes['body']
     
   const templated = {
     body: env.renderString(attributes.body, templateVariables),
