@@ -56,7 +56,7 @@ export async function loopIssues (tools: Toolkit) {
 	if (j.hasOwnProperty("milestone")) {
 	    j.milestone=milestone2i[j.milestone.toString()]
 	}
-	createAnIssue(tools, j)
+	await createAnIssue(tools, j)
     }
 }
 
