@@ -6,9 +6,9 @@ import nunjucks from 'nunjucks'
 import dateFilter from 'nunjucks-date-filter'
 import { FrontMatterAttributes, listToArray, setOutputs } from './helpers'
 
-function logError(tools: Toolkit, template: string, action: 'creating' | 'updating', err: any) {
+function logError(tools: Toolkit, action: 'creating' | 'updating', err: any) {
   // Log the error message
-  const errorMessage = `An error occurred while ${action} the issue. This might be caused by a malformed issue title, or a typo in the labels or assignees. Check ${template}!`
+  const errorMessage = `An error occurred while ${action} the issue. This might be caused by a malformed issue title, or a typo in the labels or assignees!`
   tools.log.error(errorMessage)
   tools.log.error(err)
 
@@ -54,7 +54,7 @@ export async function loopIssues (tools: Toolkit) {
 	    }
 	}
 	if (j.hasOwnProperty("milestone")) {
-	    j.milestone=milestone2i[d.toString()]
+	    j.milestone=milestone2i[j.milestone.toString()]
 	}
 	createAnIssue(tools, j)
     }
@@ -85,9 +85,11 @@ export async function createAnIssue (tools: Toolkit, attributes) {
     date: Date.now()
   }
 
-
+    const body = issueObj.body
+    delete attributes['body']
+    
   const templated = {
-    body: env.renderString(body, templateVariables),
+    body: env.renderString(attributes.body, templateVariables),
     title: env.renderString(attributes.title, templateVariables)
   }
   tools.log.debug('Templates compiled', templated)
@@ -115,7 +117,7 @@ export async function createAnIssue (tools: Toolkit, attributes) {
           setOutputs(tools, issue)
           tools.exit.success(`Updated issue ${existingIssue.title}#${existingIssue.number}: ${existingIssue.html_url}`)
         } catch (err: any) {
-          return logError(tools, template, 'updating', err)
+          return logError(tools,  'updating', err)
         }
       }
     } else {
@@ -137,6 +139,6 @@ export async function createAnIssue (tools: Toolkit, attributes) {
     setOutputs(tools, issue)
     tools.log.success(`Created issue ${issue.data.title}#${issue.data.number}: ${issue.data.html_url}`)
   } catch (err: any) {
-    return logError(tools, template, 'creating', err)
+    return logError(tools,  'creating', err)
   }
 }
