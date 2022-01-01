@@ -91,7 +91,7 @@ export async function createAnIssue (tools: Toolkit, attributes: any) {
   }
   tools.log.debug('Templates compiled', templated)
     if (attributes.depi.length!=0) {
-	templated.body = "Blocked by " + attributes.dapi.join(", ") + "\n\n" + templated.body
+	templated.body = "Blocked by " + attributes.depi.join(", ") + "\n\n" + templated.body
     }
     
   if (updateExisting !== null) {
