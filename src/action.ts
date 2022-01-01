@@ -20,8 +20,47 @@ function logError(tools: Toolkit, template: string, action: 'creating' | 'updati
   return tools.exit.failure()
 }
 
-export async function createAnIssue (tools: Toolkit) {
-  const template = tools.inputs.filename || '.github/ISSUE_TEMPLATE.md'
+export async function loopIssues (tools: Toolkit) {
+    const file = tools.intputs.json
+    if (!file) {
+      tools.exit.failure(`No json file of issues provided`)
+    }
+    const json = await tools.readFile(file) as string
+    const parsed = JSON.parse(json)
+    const issues = parsed.issues
+    const milestones=parsed.milestones
+
+    const milestone2i= {}
+    for (const j of milestones) {
+          const i = await tools.github.issues.createMilestone({
+              ...tools.context.repo,
+	      title: j.title,
+              description: j.description
+          })
+	milestone2i[j.title] = i
+    }
+
+    let ind=1
+    const issue2i = {}
+    for (const j of issues) {
+	issue2i[j.title] = ind
+	ind += 1
+    }
+    for (const j of issues) {
+	j.depi = []
+	if (j.hasOwnProperty("deps")) {
+	    for (const d of j.deps) {
+		j.depi.push(issue2i[d])
+	    }
+	}
+	if (j.hasOwnProperty("milestone")) {
+	    j.milestone=milestone2i[d]
+	}
+	createAnIssue(tools, j)
+    }
+}
+
+export async function createAnIssue (tools: Toolkit, attributes) {
   const assignees = tools.inputs.assignees
   const searchExistingType = tools.inputs.search_existing || 'open'
 
@@ -46,20 +85,16 @@ export async function createAnIssue (tools: Toolkit) {
     date: Date.now()
   }
 
-  // Get the file
-  tools.log.debug('Reading from file', template)
-  const file = await tools.readFile(template) as string
-
-  // Grab the front matter as JSON
-  const { attributes, body } = fm<FrontMatterAttributes>(file)
-  tools.log(`Front matter for ${template} is`, attributes)
 
   const templated = {
     body: env.renderString(body, templateVariables),
     title: env.renderString(attributes.title, templateVariables)
   }
   tools.log.debug('Templates compiled', templated)
-
+    if (attributes.dapi.length!=0) {
+	templated.body = "Blocked by " + attributes.dapi.join(", ") + "\n\n" + templated.body
+    }
+    
   if (updateExisting !== null) {
     tools.log.info(`Fetching issues with title "${templated.title}"`)
     const existingIssues = await tools.github.search.issuesAndPullRequests({
