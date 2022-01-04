@@ -3,7 +3,7 @@ import { Toolkit } from 'actions-toolkit'
 import nunjucks from 'nunjucks'
 // @ts-ignore
 import dateFilter from 'nunjucks-date-filter'
-import toposort from toposort
+import toposort from 'toposort'
 
 function logError(tools: Toolkit, action: 'creating' | 'updating', err: any) {
     // Log the error message
@@ -59,7 +59,7 @@ export async function loopIssues (tools: Toolkit) {
     const issueNumbers: {[index: string]:number} = {}
     
     for (const issueName of topoOrder) {
-	iss=issues[issue2i[issueName.toString()]]
+	let iss=issues[issue2i[issueName.toString()]]
 	iss.depi = []
 	if (iss.hasOwnProperty("deps")) {
 	    for (const dep of iss.deps) {
