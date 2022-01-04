@@ -3,7 +3,7 @@ import { Toolkit } from 'actions-toolkit'
 import nunjucks from 'nunjucks'
 // @ts-ignore
 import dateFilter from 'nunjucks-date-filter'
-import toposort from 'toposort'
+const toposort =require( 'toposort')
 
 function logError(tools: Toolkit, action: 'creating' | 'updating', err: any) {
     // Log the error message
