@@ -47,7 +47,8 @@ export async function loopIssues (tools: Toolkit) {
     }
 
     // Topological sort so we don't create any issues before its dependencies
-    let depArray=[]
+    type X1 = string[][]  
+    let depArray:X1=[]
     for (const iss of issues) {
 	if (iss.hasOwnProperty("deps")) {
 	    for (const dep of iss.deps) {
