@@ -52,7 +52,7 @@ export async function loopIssues (tools: Toolkit) {
     for (const iss of issues) {
 	if (iss.hasOwnProperty("deps")) {
 	    for (const dep of iss.deps) {
-		depArray.push([iss.title, dep])
+		depArray.push([dep, iss.title])
 	    }
 	}
     }
