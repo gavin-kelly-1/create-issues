@@ -55,7 +55,7 @@ export async function loopIssues (tools: Toolkit) {
 	    }
 	}
     }
-    const topoOrder = toposort(depArray)
+    const topoOrder:string[] = toposort(depArray)
     const issueNumbers: {[index: string]:number} = {}
     
     for (const issueName of topoOrder) {
