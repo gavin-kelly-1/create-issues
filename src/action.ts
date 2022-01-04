@@ -5,6 +5,8 @@ import nunjucks from 'nunjucks'
 import dateFilter from 'nunjucks-date-filter'
 const toposort =require( 'toposort')
 
+
+
 function logError(tools: Toolkit, action: 'creating' | 'updating', err: any) {
     // Log the error message
     const errorMessage = `An error occurred while ${action} the issue. This might be caused by a malformed issue title, or a typo in the labels or assignees!`
@@ -24,6 +26,13 @@ export async function loopIssues (tools: Toolkit) {
     if (!file) {
 	tools.exit.failure(`No json file of issues provided`)
     }
+    await tools.github.issues.createLabel({
+        ...tools.context.repo,
+	name: "blocked",
+	color: "000000",
+	description: "This topic has unresolved dependencies."
+    })
+
     const json = await tools.readFile(file) as string
     const parsed = JSON.parse(json)
     const issues = parsed.issues
@@ -93,6 +102,7 @@ export async function createAnIssue (tools: Toolkit, attributes: any) {
     }
     if (attributes.depi.length!=0) {
 	templated.body = "Blocked by #" + attributes.depi.join(", #") + "\n\n" + templated.body
+	attributes.labels.push("blocked")
     }
 
     // Create the new issue
