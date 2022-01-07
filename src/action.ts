@@ -73,6 +73,7 @@ export async function loopIssues (tools: Toolkit) {
 	iss.depi = []
 	if (iss.hasOwnProperty("deps")) {
 	    for (const dep of iss.deps) {
+		//preqrequisites will have already been created, so should be safe
 		iss.depi.push(issueNumbers[dep])
 	    }
 	}
