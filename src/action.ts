@@ -32,6 +32,18 @@ export async function loopIssues (tools: Toolkit) {
 	color: "000000",
 	description: "This topic has unresolved dependencies."
     })
+    await tools.github.issues.createLabel({
+        ...tools.context.repo,
+	name: "BABS Work Package",
+	color: "94CEF2",
+	description: "An agreed package of work."
+    })
+    await tools.github.issues.createLabel({
+        ...tools.context.repo,
+	name: "BABS Task",
+	color: "76b82a",
+	description: "Task that lives outside a work package."
+    })
 
     const json = await tools.readFile(file) as string
     const parsed = JSON.parse(json)
