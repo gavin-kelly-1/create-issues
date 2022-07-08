@@ -2,7 +2,7 @@ name: Create an issue
 description: Creates a new issue using a template with front matter.
 runs:
   using: node12
-  main: dist/index.js
+  main: src/index.js
 branding:
   icon: alert-circle
   color: gray-dark
