@@ -3,6 +3,9 @@ name: Publish
 on:
   release:
     types: [published, edited]
+  push:
+    branches:
+      - release
 
 jobs:
   build:
