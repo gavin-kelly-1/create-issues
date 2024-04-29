@@ -48,9 +48,10 @@ async function loopIssues (tools) {
     const milestones=parsed.milestones;
     // create milestones, and index them
     const milestone2i = {};
-    const pre_milestones=await tools.github.issues.listMilestones(...tools.context.repo);
+//    const pre_milestones=await tools.github.issues.listMilestones(...tools.context.repo);
     for (const j of milestones) {
-	var already_milestone=pre_milestones.filter(m => m.data.title == j.title);
+	//	var already_milestone=pre_milestones.filter(m => m.data.title == j.title);
+	var already_milestone=[];
 	if (already_milestone.length != 0) {
 	    var i=already_milestone[0];
 	} else {
