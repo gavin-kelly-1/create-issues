@@ -28,19 +28,19 @@ async function loopIssues (tools) {
 	name: "Blocked",
 	color: "000000",
 	description: "This topic has unresolved dependencies."
-    });
+    }).catch(_ => true);
     await tools.github.issues.createLabel({
         ...tools.context.repo,
 	name: "BABS Work Package",
 	color: "94CEF2",
 	description: "An agreed package of work."
-    });
+    }).catch(_ => true);
     await tools.github.issues.createLabel({
         ...tools.context.repo,
 	name: "BABS Task",
 	color: "76b82a",
 	description: "Task that lives outside a work package."
-    });
+    }).catch(_ => true);
 
     const json = await tools.readFile(file);
     const parsed = JSON.parse(json);
@@ -53,7 +53,7 @@ async function loopIssues (tools) {
             ...tools.context.repo,
 	    title: j.title,
             description: j.description
-        });
+        }).catch(_ => true);
 	milestone2i[j.title.toString()] = i.data.number;
     }
 
