@@ -48,12 +48,18 @@ async function loopIssues (tools) {
     const milestones=parsed.milestones;
     // create milestones, and index them
     const milestone2i = {};
+    const pre_milestones=await tools.github.issues.listMilestones(...tools.context.repo);
     for (const j of milestones) {
-        const i = await tools.github.issues.createMilestone({
-            ...tools.context.repo,
-	    title: j.title,
-            description: j.description
-        }).catch(_ => true);
+	var already_milestone=pre_milestones.filter(m => m.data.title == j.title);
+	if (already_milestone.length != 0) {
+	    var i=already_milestone[0];
+	} else {
+            var i = await tools.github.issues.createMilestone({
+		...tools.context.repo,
+		title: j.title,
+		description: j.description
+            });
+	}
 	milestone2i[j.title.toString()] = i.data.number;
     }
 
