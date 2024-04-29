@@ -130,7 +130,7 @@ async function createAnIssue (tools, attributes) {
 	title: env.renderString(attributes.title, templateVariables)
     };
     if (attributes.depi.length!=0) {
-	templated.body = "Blocked by #" + attributes.depi.join(", #") + "\n\n" + templated.body;
+	templated.body = "Prerequisites: #" + attributes.depi.join(", #") + "\n\n" + templated.body;
 	attributes.labels.push("blocked");
     }
 
