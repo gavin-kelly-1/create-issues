@@ -104,9 +104,22 @@ async function createAnIssue (tools, attributes) {
 	env: process.env,
 	date: Date.now()
     };
-    
+    if (typeof attributes.body == "object") {
+	var body=await Promise.all(
+	    attributes.body.map(async function(bod) {
+		if (Object.hasOwn(bod, "markdown")) {
+		    return tools.readFile(bod.markdown).catch(_ => "");
+		} else if (Object.hasOwn(bod, "template")) {
+		    return tools.readFile(bod.template).catch(_ => "");
+		} else {
+		    return bod;
+		}
+	    }));
+    } else {
+	var body=[attributes.body];
+    }
     const templated = {
-	body: env.renderString(attributes.body, templateVariables),
+	body: body.map(b => env.renderString(b, templateVariables)).join('\n\n'),
 	title: env.renderString(attributes.title, templateVariables)
     };
     if (attributes.depi.length!=0) {
