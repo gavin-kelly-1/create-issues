@@ -4,7 +4,7 @@ const dateFilter = require('nunjucks-date-filter');
 const toposort = require('toposort');
 
 
-function logError(tool, action, err) {
+function logError(tools, action, err) {
     // Log the error message
     const errorMessage = `An error occurred while ${action} the issue. This might be caused by a malformed issue title, or a typo in the labels or assignees!`;
     tools.log.error(errorMessage);
@@ -48,22 +48,23 @@ async function loopIssues (tools) {
     const milestones=parsed.milestones;
     // create milestones, and index them
     const milestone2i = {};
-//    const pre_milestones=await tools.github.issues.listMilestones(...tools.context.repo);
-    for (const j of milestones) {
-	//	var already_milestone=pre_milestones.filter(m => m.data.title == j.title);
-	var already_milestone=[];
-	if (already_milestone.length != 0) {
-	    var i=already_milestone[0];
-	} else {
-            var i = await tools.github.issues.createMilestone({
-		...tools.context.repo,
-		title: j.title,
-		description: j.description
-            });
-	}
-	milestone2i[j.title.toString()] = i.data.number;
-    }
-
+    tools.github.paginate(tools.github.issues.listMilestones,
+			  {...tools.context.repo})
+	.then(function(pre_m) {
+	    for (const j of milestones) {
+		let already_milestone=pre_m.filter(m => m.data.title == j.title);
+		if (already_milestone.length != 0) {
+		    var i=already_milestone[0];
+		} else {
+		    var i = await tools.github.issues.createMilestone({
+			...tools.context.repo,
+			title: j.title,
+			description: j.description
+		    });
+		}
+		milestone2i[j.title.toString()] = i.data.number;
+	    }
+	});
     let ind=0;
     const issue2i = {};
     for (const iss of issues) {
