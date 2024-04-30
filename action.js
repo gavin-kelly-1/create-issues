@@ -52,7 +52,7 @@ async function loopIssues (tools) {
 			  {...tools.context.repo})
 	.then(async function(pre_m) {
 	    for (const j of milestones) {
-		console.log(m);
+		console.log(pre_m);
 		let already_milestone=pre_m.filter(m => m.data.title == j.title);
 		if (already_milestone.length != 0) {
 		    var i=already_milestone[0];
