@@ -50,7 +50,7 @@ async function loopIssues (tools) {
     const milestone2i = {};
     tools.github.paginate(tools.github.issues.listMilestones,
 			  {...tools.context.repo})
-	.then(function(pre_m) {
+	.then(async function(pre_m) {
 	    for (const j of milestones) {
 		let already_milestone=pre_m.filter(m => m.data.title == j.title);
 		if (already_milestone.length != 0) {
