@@ -53,7 +53,7 @@ async function loopIssues (tools) {
 	.then(async function(pre_m) {
 	    for (const j of milestones) {
 		console.log(pre_m);
-		let already_milestone=pre_m.filter(m => m.data.title == j.title);
+		let already_milestone=pre_m.filter(m => m.title == j.title);
 		if (already_milestone.length != 0) {
 		    var i=already_milestone[0];
 		} else {
@@ -61,9 +61,9 @@ async function loopIssues (tools) {
 			...tools.context.repo,
 			title: j.title,
 			description: j.description
-		    });
+		    }).data;
 		}
-		milestone2i[j.title.toString()] = i.data.number;
+		milestone2i[j.title.toString()] = i.number;
 	    }
 	});
     let ind=0;
