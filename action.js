@@ -61,7 +61,7 @@ async function loopIssues (tools) {
 			...tools.context.repo,
 			title: j.title,
 			description: j.description
-		    }).data;
+		    });
 		}
 		console.log(i);
 		milestone2i[j.title.toString()] = i.number;
