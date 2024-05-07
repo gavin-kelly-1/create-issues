@@ -52,16 +52,16 @@ async function loopIssues (tools) {
 			  {...tools.context.repo})
 	.then(async function(pre_m) {
 	    for (const j of milestones) {
-		console.log(pre_m);
 		let already_milestone=pre_m.filter(m => m.title == j.title);
+		var i;
 		if (already_milestone.length != 0) {
-		    var i=already_milestone[0];
+		    i=already_milestone[0];
 		} else {
-		    var i = await tools.github.issues.createMilestone({
+		    i = await tools.github.issues.createMilestone({
 			...tools.context.repo,
 			title: j.title,
 			description: j.description
-		    }).data;
+		    });
 		}
 		milestone2i[j.title.toString()] = i.number;
 	    }
